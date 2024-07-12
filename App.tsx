@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  AppState,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -15,6 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 
 import {
@@ -62,6 +64,16 @@ function App(): React.JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  // read 'AppState.currentState' to remind RN to register current state on Android PROD
+  // comment, uncomment this console.log to see difference on Android prod
+  console.log('INITIAL', AppState.currentState);
+
+  const addAppStateListener = () => {
+    AppState.addEventListener('change', nextAppState => {
+      console.log('nextAppState', nextAppState);
+    });
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -72,6 +84,7 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Button title="addAppStateListener" onPress={addAppStateListener} />
       </ScrollView>
     </SafeAreaView>
   );
